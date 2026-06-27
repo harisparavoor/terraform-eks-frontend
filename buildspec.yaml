@@ -1,0 +1,48 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - echo Installing dependencies...
+      - npm install -g webpack webpack-cli
+      - npm install
+
+  pre_build:
+    commands:
+      - sed -i "s|{{REACT_APP_BACKEND_URL}}|$REACT_APP_BACKEND_URL|g" webpack.config.js
+      - echo $REACT_APP_BACKEND_URL
+      - echo Replacing placeholders in appspec.json
+      #- sed -i "s|{{frontend_blue_target_group_name}}|$frontend_blue_target_group_name|g" appspec.json
+      #- sed -i "s|{{frontend_green_target_group_name}}|$frontend_green_target_group_name|g" appspec.json
+      - sed -i "s|{{task_definition}}|$task_definition|g" appspec.json
+      #- sed -i "s|{{alb_listener_arn}}|$alb_listener_arn|g" appspec.json
+      - echo "Here is the final appspec.yaml after replacement:"
+      - cat appspec.json
+      - cat webpack.config.js
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+      - REPOSITORY_URI=$REPOSITORY_URI
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+
+  build:
+    commands:
+      - echo Building the Docker image...
+      - docker build --build-arg REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+
+  post_build:
+    commands:
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - printf '[{"name":"frontend","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+
+artifacts:
+  files:
+    - appspec.json
+    - imagedefinitions.json
