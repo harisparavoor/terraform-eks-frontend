@@ -3,6 +3,8 @@ kind: Deployment
 
 metadata:
   name: PROJECT_NAME
+  labels:
+    app: PROJECT_NAME
 
 spec:
   replicas: 2
@@ -19,21 +21,21 @@ spec:
     spec:
       containers:
         - name: PROJECT_NAME
-      image: IMAGE_URI
+          image: IMAGE_URI
 
-      ports:
-        - containerPort: 3000
+          ports:
+            - containerPort: 3000
 
-      env:
-        - name: REACT_APP_BACKEND_URL
-          value: "http://backend-service"
+          env:
+            - name: REACT_APP_BACKEND_URL
+              value: "http://backend-service"
 
-      readinessProbe:
-        httpGet:
-          path: /
-          port: 3000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
 
-      livenessProbe:
-        httpGet:
-          path: /
-          port: 3000
+            livenessProbe:
+              httpGet:
+              path: /
+              port: 3000
