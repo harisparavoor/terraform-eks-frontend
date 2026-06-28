@@ -12,19 +12,19 @@ spec:
       labels:
         app: PROJECT_NAME
     spec:
-      containers:
-         - name: PROJECT_NAME
-           image: IMAGE_URI
-              ports:
-            - containerPort: 3000
-              env:
-            - name: REACT_APP_BACKEND_URL
-              value: "http://backend-service"
-           readinessProbe:
-            httpGet:
-              path: /
-              port: 3000
-           livenessProbe:
-            httpGet:
-              path: /
-              port: 3000
+    containers:
+      - name: PROJECT_NAME
+        image: IMAGE_URI
+        ports:
+          - containerPort: 3000
+    env:
+      - name: REACT_APP_BACKEND_URL
+        value: "http://backend-service"
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 3000
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 3000
