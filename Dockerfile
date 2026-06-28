@@ -5,9 +5,7 @@ ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
 
 WORKDIR /app
 
-COPY package.json ./
-COPY webpack.config.js ./
-COPY src ./src
+COPY . .
 
 RUN npm install
 RUN npm run build
