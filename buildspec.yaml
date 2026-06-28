@@ -8,7 +8,7 @@ env:
 phases:
   install:
     commands:
-      - set -euxo pipefail
+      - set -eux
 
       - echo "Install kubectl"
       - curl -LO https://dl.k8s.io/release/v1.31.0/bin/linux/amd64/kubectl
