@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+name: PROJECT_NAME
+
+spec:
+
+replicas: 2
+
+selector:
+matchLabels:
+app: PROJECT_NAME
+
+template:
+  metadata:
+    labels:
+      app: PROJECT_NAME
+
+  spec:
+    containers:
+      - name: PROJECT_NAME
+
+        image: IMAGE_URI
+
+        ports:
+          - containerPort: 3000
+
+        env:
+          - name: REACT_APP_BACKEND_URL
+            value: "http://backend-service"
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
