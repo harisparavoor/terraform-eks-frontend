@@ -1,45 +1,111 @@
 version: 0.2
 
 env:
-  variables:
-    PROJECT_NAME: frontend
-    NAMESPACE: default
+variables:
+PROJECT_NAME: frontend
+NAMESPACE: default
 
 phases:
-  install:
-    commands:
-      - curl -LO https://dl.k8s.io/release/v1.31.0/bin/linux/amd64/kubectl
-      - chmod +x kubectl
-      - mv kubectl /usr/local/bin/
 
-  pre_build:
-    commands:
-      - echo "Login to ECR"
-      - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$REPOSITORY_URI"
-      - IMAGE_TAG=$(echo "$CODEBUILD_RESOLVED_SOURCE_VERSION" | cut -c 1-7)
-      - IMAGE_TAG=${IMAGE_TAG:=latest}
-      - aws eks update-kubeconfig --name "$CLUSTER_NAME" --region "$AWS_DEFAULT_REGION"
+install:
+commands:
+  - set -euxo pipefail
 
-  build:
-    commands:
-      - docker build --build-arg REACT_APP_BACKEND_URL="$REACT_APP_BACKEND_URL" -t "$REPOSITORY_URI:$IMAGE_TAG" .
-      - docker push "$REPOSITORY_URI:$IMAGE_TAG"
-      - mkdir -p rendered
-      - cp deployment.yaml service.yaml ingress.yaml rendered/
-      - sed -i "s|PROJECT_NAME|$PROJECT_NAME|g" rendered/deployment.yaml
-      - sed -i "s|IMAGE_URI|$REPOSITORY_URI:$IMAGE_TAG|g" rendered/deployment.yaml
-      - sed -i "s|PROJECT_NAME|$PROJECT_NAME|g" rendered/service.yaml
-      - sed -i "s|PROJECT_NAME|$PROJECT_NAME|g" rendered/ingress.yaml
 
-  post_build:
-    commands:
-      - kubectl apply -f rendered/deployment.yaml -n "$NAMESPACE"
-      - kubectl apply -f rendered/service.yaml -n "$NAMESPACE"
-      - kubectl apply -f rendered/ingress.yaml -n "$NAMESPACE"
-      - kubectl rollout status deployment/"$PROJECT_NAME" -n "$NAMESPACE"
+    - echo "Install kubectl"
+    - curl -LO https://dl.k8s.io/release/v1.31.0/bin/linux/amd64/kubectl
+    - chmod +x kubectl
+    - mv kubectl /usr/local/bin/
+
+    - kubectl version --client
+
+pre_build:
+  commands:
+    - echo "AWS Identity"
+    - aws sts get-caller-identity
+
+    - echo "Login to ECR"
+    - aws ecr get-login-password --region "$AWS_DEFAULT_REGION" | docker login --username AWS --password-stdin "$REPOSITORY_URI"
+
+    - echo "Generate Image Tag"
+    - export IMAGE_TAG=$(echo "$CODEBUILD_RESOLVED_SOURCE_VERSION" | cut -c 1-7)
+    - export IMAGE_TAG=${IMAGE_TAG:=latest}
+
+    - echo "Update kubeconfig"
+    - aws eks update-kubeconfig \
+      --name "$CLUSTER_NAME" \
+      --region "$AWS_DEFAULT_REGION"
+
+    - echo "Verify cluster access"
+    - kubectl cluster-info
+    - kubectl get nodes
+    - kubectl get ns
+
+build:
+  commands:
+    - echo "Build Docker image"
+
+    - docker build \
+      --build-arg REACT_APP_BACKEND_URL="$REACT_APP_BACKEND_URL" \
+      -t "$REPOSITORY_URI:$IMAGE_TAG" .
+
+    - echo "Push image"
+
+    - docker push "$REPOSITORY_URI:$IMAGE_TAG"
+
+    - echo "Prepare manifests"
+
+    - mkdir -p rendered
+
+    - cp deployment.yaml rendered/
+    - cp service.yaml rendered/
+    - cp ingress.yaml rendered/
+
+    - sed -i "s|PROJECT_NAME|$PROJECT_NAME|g" rendered/deployment.yaml
+    - sed -i "s|IMAGE_URI|$REPOSITORY_URI:$IMAGE_TAG|g" rendered/deployment.yaml
+
+    - sed -i "s|PROJECT_NAME|$PROJECT_NAME|g" rendered/service.yaml
+    - sed -i "s|PROJECT_NAME|$PROJECT_NAME|g" rendered/ingress.yaml
+
+    - echo "Rendered deployment"
+    - cat rendered/deployment.yaml
+
+    - echo "Rendered service"
+    - cat rendered/service.yaml
+
+    - echo "Rendered ingress"
+    - cat rendered/ingress.yaml
+
+post_build:
+  commands:
+    - echo "Deploy deployment"
+    - kubectl apply -f rendered/deployment.yaml -n "$NAMESPACE"
+
+    - echo "Deploy service"
+    - kubectl apply -f rendered/service.yaml -n "$NAMESPACE"
+
+    - echo "Deploy ingress"
+    - kubectl apply -f rendered/ingress.yaml -n "$NAMESPACE"
+
+    - echo "Verify deployment"
+
+    - kubectl get deployment -n "$NAMESPACE"
+
+    - kubectl get pods -n "$NAMESPACE"
+
+    - kubectl get svc -n "$NAMESPACE"
+
+    - kubectl get ingress -n "$NAMESPACE"
+
+    - kubectl describe deployment "$PROJECT_NAME" -n "$NAMESPACE"
+
+    - kubectl rollout status \
+      deployment/"$PROJECT_NAME" \
+      -n "$NAMESPACE" \
+      --timeout=300s
+
+    - kubectl get pods -n "$NAMESPACE" -o wide
 
 artifacts:
-  files:
-    - rendered/deployment.yaml
-    - rendered/service.yaml
-    - rendered/ingress.yaml
+files:
+  - rendered/**/*
