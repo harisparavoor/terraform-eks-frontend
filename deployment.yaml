@@ -28,7 +28,7 @@ spec:
 
           env:
             - name: REACT_APP_BACKEND_URL
-              value: "http://backend-service"
+              value: "REACT_APP_BACKEND_URL"
 
           readinessProbe:
             httpGet:

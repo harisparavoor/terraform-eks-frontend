@@ -49,7 +49,7 @@ phases:
 
       - export IMAGE_URI="$REPOSITORY_URI:$IMAGE_TAG"
 
-      - sed "s|PROJECT_NAME|$PROJECT_NAME|g; s|IMAGE_URI|$IMAGE_URI|g" deployment.yaml > rendered/deployment.yaml
+      - sed "s|PROJECT_NAME|$PROJECT_NAME|g; s|IMAGE_URI|$IMAGE_URI|g; s|REACT_APP_BACKEND_URL|$REACT_APP_BACKEND_URL|g" deployment.yaml > rendered/deployment.yaml
       - sed "s|PROJECT_NAME|$PROJECT_NAME|g" service.yaml > rendered/service.yaml
       - sed "s|PROJECT_NAME|$PROJECT_NAME|g" ingress.yaml > rendered/ingress.yaml
 
