@@ -1,15 +1,10 @@
 var path = require('path');
 
 // Use environment variable with proper fallback
-//const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
-//console.log('Backend URL:', process.env.REACT_APP_BACKEND_URL);
 const backendUrl =
-    '{{REACT_APP_BACKEND_URL}}';
+    process.env.REACT_APP_BACKEND_URL || 'http://localhost:8080';
+console.log('Backend URL:', backendUrl);
 
-console.log(
-    'Backend URL:',
-    backendUrl
-);
 module.exports = {
     entry: './src/main/js/app.js',
     devtool: 'eval-source-map',
