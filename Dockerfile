@@ -1,7 +1,7 @@
-FROM node:22
-
+#FROM node:22
+FROM 532607548077.dkr.ecr.us-east-1.amazonaws.com/mynodeappeks-frontend-dev:latest
 ARG REACT_APP_BACKEND_URL=http://localhost:8080
-ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
+ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}:8080
 
 WORKDIR /app
 
