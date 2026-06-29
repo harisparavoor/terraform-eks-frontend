@@ -32,10 +32,10 @@ spec:
 
           readinessProbe:
             httpGet:
-              path: /index.html
+              path: /health
               port: 3000
 
           livenessProbe:
             httpGet:
-              path: /index.html
+              path: /health
               port: 3000
