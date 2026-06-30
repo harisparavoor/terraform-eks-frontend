@@ -32,7 +32,7 @@ spec:
 
           readinessProbe:
             httpGet:
-              path: /
+              path: /index.html
               port: 3000
             initialDelaySeconds: 20
             timeoutSeconds: 5
@@ -40,7 +40,7 @@ spec:
 
           livenessProbe:
             httpGet:
-              path: /
+              path: /index.html
               port: 3000
             initialDelaySeconds: 60
             timeoutSeconds: 5
@@ -48,7 +48,7 @@ spec:
 
           startupProbe:
             httpGet:
-              path: /
+              path: /index.html
               port: 3000
             failureThreshold: 30
             periodSeconds: 10
