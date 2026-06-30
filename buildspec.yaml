@@ -51,7 +51,7 @@ phases:
 
       - sed "s|PROJECT_NAME|$PROJECT_NAME|g; s|IMAGE_URI|$IMAGE_URI|g; s|REACT_APP_BACKEND_URL|$REACT_APP_BACKEND_URL|g" deployment.yaml > rendered/deployment.yaml
       - sed "s|PROJECT_NAME|$PROJECT_NAME|g" service.yaml > rendered/service.yaml
-      - sed "s|PROJECT_NAME|$PROJECT_NAME|g" ingress.yaml > rendered/ingress.yaml
+      # - sed "s|PROJECT_NAME|$PROJECT_NAME|g" ingress.yaml > rendered/ingress.yaml
 
   post_build:
     commands:
@@ -59,13 +59,13 @@ phases:
 
       - kubectl apply -f rendered/deployment.yaml -n "$NAMESPACE"
       - kubectl apply -f rendered/service.yaml -n "$NAMESPACE"
-      - kubectl apply -f rendered/ingress.yaml -n "$NAMESPACE"
+      #- kubectl apply -f rendered/ingress.yaml -n "$NAMESPACE"
 
       - kubectl rollout status deployment/"$PROJECT_NAME" -n "$NAMESPACE" --timeout=300s
 
       - kubectl get pods -n "$NAMESPACE"
       - kubectl get svc -n "$NAMESPACE"
-      - kubectl get ingress -n "$NAMESPACE"
+      #- kubectl get ingress -n "$NAMESPACE"
 
 artifacts:
   files:
