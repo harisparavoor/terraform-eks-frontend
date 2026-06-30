@@ -34,21 +34,21 @@ spec:
             httpGet:
               path: /
               port: 3000
-              initialDelaySeconds: 20
-              timeoutSeconds: 5
-              periodSeconds: 10
+            initialDelaySeconds: 20
+            timeoutSeconds: 5
+            periodSeconds: 10
 
           livenessProbe:
             httpGet:
               path: /
               port: 3000
-              initialDelaySeconds: 60
-              timeoutSeconds: 5
-              periodSeconds: 20
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 20
 
           startupProbe:
             httpGet:
               path: /
               port: 3000
-              failureThreshold: 30
-              periodSeconds: 10
+            failureThreshold: 30
+            periodSeconds: 10
