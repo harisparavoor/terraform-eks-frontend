@@ -31,24 +31,21 @@ spec:
               value: "REACT_APP_BACKEND_URL"
 
           readinessProbe:
-            httpGet:
-              path: /index.html
+            tcpSocket:
               port: 3000
-            initialDelaySeconds: 20
+            initialDelaySeconds: 30
             timeoutSeconds: 5
             periodSeconds: 10
 
           livenessProbe:
-            httpGet:
-              path: /index.html
+            tcpSocket:
               port: 3000
-            initialDelaySeconds: 60
+            initialDelaySeconds: 90
             timeoutSeconds: 5
             periodSeconds: 20
 
           startupProbe:
-            httpGet:
-              path: /index.html
+            tcpSocket:
               port: 3000
-            failureThreshold: 30
+            failureThreshold: 60
             periodSeconds: 10
