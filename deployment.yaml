@@ -2,25 +2,25 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: PROJECT_NAME
+  name: Frontend_App
   labels:
-    app: PROJECT_NAME
+    app: Frontend_App
 
 spec:
   replicas: 2
 
   selector:
     matchLabels:
-      app: PROJECT_NAME
+      app: Frontend_App
 
   template:
     metadata:
       labels:
-        app: PROJECT_NAME
+        app: Frontend_App
 
     spec:
       containers:
-        - name: PROJECT_NAME
+        - name: Frontend_App
           image: IMAGE_URI
 
           ports:

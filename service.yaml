@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: PROJECT_NAME-service
+  name: Frontend_App-service
 spec:
   type: ClusterIP
   selector:
-    app: PROJECT_NAME
+    app: Frontend_App
   ports:
     - protocol: TCP
       port: 80
