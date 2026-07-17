@@ -51,7 +51,7 @@ phases:
 
       - sed "s|Frontend_App|$Frontend_App|g; s|IMAGE_URI|$IMAGE_URI|g; s|REACT_APP_BACKEND_URL|$REACT_APP_BACKEND_URL|g" deployment.yaml > rendered/deployment.yaml
       - sed "s|Frontend_App|$Frontend_App|g" service.yaml > rendered/service.yaml
-      - sed "s|Frontend-app-tg-arn|$Frontend-App-tg-arn|g" rendered/frontend-targetgroupbinding.yaml
+      - sed "s|Frontend-app-tg-arn|$Frontend-app-tg-arn|g" frontend-targetgroupbinding.yaml > rendered/frontend-targetgroupbinding.yaml
       # - sed "s|Frontend_App|$Frontend_App|g" ingress.yaml > rendered/ingress.yaml
 
   post_build:
