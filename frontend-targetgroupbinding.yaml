@@ -1,0 +1,19 @@
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: frontend-app-tgb
+  namespace: default
+  labels:
+    app: frontend-app
+    environment: production
+spec:
+  targetGroupARN: Frontend-app-tg-arn
+  targetType: ip
+  serviceRef:
+    name: frontend-app-service
+    port: 80
+  #networking:
+  #  ingress:
+  #    - from:
+  #      - securityGroup:
+  #          groupId:

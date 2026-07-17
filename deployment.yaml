@@ -19,33 +19,33 @@ spec:
         app: Frontend_App
 
     spec:
-      containers:
-        - name: Frontend_App
-          image: IMAGE_URI
+    containers:
+      - name: Frontend_App
+        image: IMAGE_URI
 
-          ports:
-            - containerPort: 3000
+        ports:
+          - containerPort: 3000
 
-          env:
-            - name: REACT_APP_BACKEND_URL
-              value: "REACT_APP_BACKEND_URL"
+        env:
+          - name: REACT_APP_BACKEND_URL
+            value: "REACT_APP_BACKEND_URL"
 
-          readinessProbe:
-            tcpSocket:
-              port: 3000
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
-            periodSeconds: 10
+        readinessProbe:
+          tcpSocket:
+            port: 3000
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          periodSeconds: 10
 
-          livenessProbe:
-            tcpSocket:
-              port: 3000
-            initialDelaySeconds: 90
-            timeoutSeconds: 5
-            periodSeconds: 20
+        livenessProbe:
+          tcpSocket:
+            port: 3000
+          initialDelaySeconds: 90
+          timeoutSeconds: 5
+          periodSeconds: 20
 
-          startupProbe:
-            tcpSocket:
-              port: 3000
-            failureThreshold: 60
-            periodSeconds: 10
+        startupProbe:
+          tcpSocket:
+            port: 3000
+          failureThreshold: 60
+          periodSeconds: 10

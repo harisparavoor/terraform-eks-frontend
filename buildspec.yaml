@@ -51,6 +51,7 @@ phases:
 
       - sed "s|Frontend_App|$Frontend_App|g; s|IMAGE_URI|$IMAGE_URI|g; s|REACT_APP_BACKEND_URL|$REACT_APP_BACKEND_URL|g" deployment.yaml > rendered/deployment.yaml
       - sed "s|Frontend_App|$Frontend_App|g" service.yaml > rendered/service.yaml
+      - sed "s|Frontend_App-tg-arn|$Frontend_App-tg-arn|g" rendered/frontend-targetgroupbinding.yaml
       # - sed "s|Frontend_App|$Frontend_App|g" ingress.yaml > rendered/ingress.yaml
 
   post_build:
@@ -59,6 +60,7 @@ phases:
 
       - kubectl apply -f rendered/deployment.yaml -n "$NAMESPACE"
       - kubectl apply -f rendered/service.yaml -n "$NAMESPACE"
+      - kubectl apply -f rendered/frontend-targetgroupbinding.yaml -n "$NAMESPACE"
       #- kubectl apply -f rendered/ingress.yaml -n "$NAMESPACE"
 
       - kubectl rollout status deployment/"$Frontend_App" -n "$NAMESPACE" --timeout=300s
