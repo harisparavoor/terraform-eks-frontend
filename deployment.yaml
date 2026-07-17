@@ -17,8 +17,7 @@ spec:
     metadata:
       labels:
         app: Frontend_App
-
-    spec:
+  spec:
     containers:
       - name: Frontend_App
         image: IMAGE_URI
