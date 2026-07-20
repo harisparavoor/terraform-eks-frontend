@@ -1,6 +1,5 @@
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
   name: FRONTEND_APP
   labels:
@@ -17,7 +16,7 @@ spec:
     metadata:
       labels:
         app: FRONTEND_APP
-    spec:
+  spec:
     containers:
       - name: FRONTEND_APP
         image: IMAGE_URI
