@@ -2,24 +2,24 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: Frontend_App
+  name: FRONTEND_APP
   labels:
-    app: Frontend_App
+    app: FRONTEND_APP
 
 spec:
   replicas: 2
 
   selector:
     matchLabels:
-      app: Frontend_App
+      app: FRONTEND_APP
 
   template:
     metadata:
       labels:
-        app: Frontend_App
+        app: FRONTEND_APP
     spec:
     containers:
-      - name: Frontend_App
+      - name: FRONTEND_APP
         image: IMAGE_URI
 
         ports:

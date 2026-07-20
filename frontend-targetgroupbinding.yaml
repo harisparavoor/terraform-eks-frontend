@@ -4,13 +4,13 @@ metadata:
   name: frontend-app-tgb
   namespace: default
   labels:
-    app: frontend-app
+    app: FRONTEND_APP
     environment: production
 spec:
-  targetGroupARN: Frontend-app-tg-arn
+  targetGroupARN: FRONTEND_TG_ARN
   targetType: ip
   serviceRef:
-    name: frontend-app-service
+    name: FRONTEND_APP-service
     port: 80
   #networking:
   #  ingress:
