@@ -27,7 +27,7 @@ phases:
 
       - echo "Generate Image Tag"
       - export IMAGE_TAG=$(echo "$CODEBUILD_RESOLVED_SOURCE_VERSION" | cut -c 1-7)
-      - export IMAGE_TAG=${COMMIT_HASH:=latest}
+      - export IMAGE_TAG=${IMAGE_TAG:=latest}
 
       - echo "Update kubeconfig"
       - aws eks update-kubeconfig --name "$CLUSTER_NAME" --region "$AWS_DEFAULT_REGION"
