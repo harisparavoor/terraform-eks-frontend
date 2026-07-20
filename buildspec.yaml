@@ -27,7 +27,7 @@ phases:
 
       - echo "Generate Image Tag"
       - export IMAGE_TAG=$(echo "$CODEBUILD_RESOLVED_SOURCE_VERSION" | cut -c 1-7)
-      - export IMAGE_TAG=${IMAGE_TAG:=latest}
+      - export IMAGE_TAG=${COMMIT_HASH:=latest}
 
       - echo "Update kubeconfig"
       - aws eks update-kubeconfig --name "$CLUSTER_NAME" --region "$AWS_DEFAULT_REGION"
@@ -40,8 +40,10 @@ phases:
     commands:
       - echo "Build Docker image"
       - docker build --build-arg REACT_APP_BACKEND_URL="$REACT_APP_BACKEND_URL" -t "$REPOSITORY_URI:$IMAGE_TAG" .
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
 
       - echo "Push image"
+      - docker push $REPOSITORY_URI:latest
       - docker push "$REPOSITORY_URI:$IMAGE_TAG"
 
       - echo "Render manifests"
