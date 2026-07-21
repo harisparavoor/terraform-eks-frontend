@@ -53,7 +53,7 @@ phases:
 
       - sed "s|FRONTEND_APP|$FRONTEND_APP|g; s|IMAGE_URI|$IMAGE_URI|g; s|REACT_APP_BACKEND_URL|$REACT_APP_BACKEND_URL|g" deployment.yaml > rendered/deployment.yaml
       - sed "s|FRONTEND_APP|$FRONTEND_APP|g" service.yaml > rendered/service.yaml
-      - sed "s|FRONTEND_TG_ARN|$FRONTEND_TG_ARN|g";"s|FRONTEND_APP|$FRONTEND_APP|g" frontend-targetgroupbinding.yaml > rendered/frontend-targetgroupbinding.yaml
+      - sed "s|FRONTEND_TG_ARN|$FRONTEND_TG_ARN|g; s|FRONTEND_APP|$FRONTEND_APP|g" frontend-targetgroupbinding.yaml > rendered/frontend-targetgroupbinding.yaml
       # - sed "s|FRONTEND_APP|$FRONTEND_APP|g" ingress.yaml > rendered/ingress.yaml
 
   post_build:
