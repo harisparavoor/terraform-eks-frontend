@@ -65,7 +65,7 @@ phases:
       - kubectl apply -f rendered/frontend-targetgroupbinding.yaml -n "$NAMESPACE"
       #- kubectl apply -f rendered/ingress.yaml -n "$NAMESPACE"
 
-      - kubectl rollout status deployment/"$Frontend_App" -n "$NAMESPACE" --timeout=300s
+      - kubectl rollout status deployment/"$FRONTEND_APP" -n "$NAMESPACE" --timeout=300s
 
       - kubectl get pods -n "$NAMESPACE"
       - kubectl get svc -n "$NAMESPACE"
