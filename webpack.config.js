@@ -2,12 +2,12 @@ var path = require('path');
 
 // Use environment variable with proper fallback
 const host =
-    process.env.REACT_APP_BACKEND_URL || 'localhost';
+    process.env.REACT_APP_BACKEND_URL || 'localhost:8080';
 
 const backendUrl =
     host.startsWith('http')
         ? host
-        : `http://${host}-service:8080`;
+        : `http://${host}-service`;
 
 console.log('Backend URL:', backendUrl);
 module.exports = {
