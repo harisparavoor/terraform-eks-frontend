@@ -62,6 +62,9 @@ phases:
 
       - kubectl apply -f rendered/deployment.yaml -n "$NAMESPACE"
       - kubectl apply -f rendered/service.yaml -n "$NAMESPACE"
+      - echo "Waiting for 360 seconds for service to be created..."
+      - sleep 360
+      - echo "Continuing targetgroupbinding"
       - kubectl apply -f rendered/frontend-targetgroupbinding.yaml -n "$NAMESPACE"
       #- kubectl apply -f rendered/ingress.yaml -n "$NAMESPACE"
 
